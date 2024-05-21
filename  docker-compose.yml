@@ -1,0 +1,12 @@
+version: '1.0'
+services:
+  app:
+    # 
+  db:
+    # 
+  redis:
+    # 
+  localstock:
+    # 
+volumes:
+  # 
