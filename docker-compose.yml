@@ -1,0 +1,43 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./infra/docker/go/Dockerfile
+    ports:
+      - "4000:8080"
+    volumes:
+      - ./backend/src/:/workspace
+    tty: true
+  db:
+    image: "mysql:8.0"
+    container_name: "db"
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=${DB_DATABASE:-go_gin_blog_db}
+      - MYSQL_USER=${DB_USERNAME:-gopher}
+      - MYSQL_PASSWORD=${DB_PASSWORD:-secret}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-secret}
+  redis:
+    image: "redis:latest"
+    container_name: "redis"
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+  localstack:
+    image: localstack/localstack:latest
+    ports:
+      - target: 4567
+        published: ${DOCKER_LOCAL_STACK_PORT:-4567}
+        protocol: tcp
+        mode: host
+    volumes:
+      - localstack-store:/var/lib/localstack
+volumes:
+  redis-data:
+  mysql_data:
+  localstack-store:
