@@ -1,9 +1,18 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+
+	"src/lib/database"
+)
 
 func main() {
 	r := gin.Default()
+
+	db := database.DBConnection()
+
+	defer db.Close()
+
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "Hello World!!!",
@@ -15,5 +24,5 @@ func main() {
 			"message": "Wooooo!!!",
 		})
 	})
-	r.Run()
+	r.Run(":8080")
 }
