@@ -1,14 +1,5 @@
 version: '3.8'
 services:
-  app:
-    build:
-      context: .
-      dockerfile: ./infra/docker/go/Dockerfile
-    ports:
-      - "4000:8080"
-    volumes:
-      - ./backend/src/:/workspace
-    tty: true
   db:
     image: "mysql:8.0"
     container_name: "db"
@@ -21,6 +12,17 @@ services:
       - MYSQL_USER=${DB_USERNAME:-gopher}
       - MYSQL_PASSWORD=${DB_PASSWORD:-secret}
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-secret}
+  app:
+    build:
+      context: .
+      dockerfile: ./infra/docker/go/Dockerfile
+    ports:
+      - "4000:8080"
+    volumes:
+      - ./backend/src/:/workspace
+    tty: true
+    depends_on:
+      - db
   redis:
     image: "redis:latest"
     container_name: "redis"

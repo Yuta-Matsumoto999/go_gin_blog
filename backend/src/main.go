@@ -1,17 +1,18 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-
 	"src/lib/database"
+
+	"github.com/gin-gonic/gin"
 )
+
+func init() {
+	db := database.DBConnection()
+	database.DBMigration(db)
+}
 
 func main() {
 	r := gin.Default()
-
-	db := database.DBConnection()
-
-	defer db.Close()
 
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
